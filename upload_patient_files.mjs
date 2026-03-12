@@ -17,7 +17,7 @@ const UPLOADER_ID = "bulk-import";
 const UPLOADER_NAME = "Bulk Import";
 const UPLOADER_TYPE = "staff";
 const EXCLUDED_EXTENSIONS = new Set([".one", ".onetoc2"]);
-const EXCLUDED_DIRS = new Set(["Personal Patient Records Template"]);
+const EXCLUDED_DIRS = new Set(["Personal Patient Records"]);
 
 const MIME_TYPES = {
   ".pdf": "application/pdf",
@@ -98,7 +98,7 @@ function collectFiles(dir) {
   for (const entry of entries) {
     const fullPath = join(dir, entry.name);
     if (entry.isDirectory()) {
-      if (!EXCLUDED_DIRS.has(entry.name)) {
+      if (![...EXCLUDED_DIRS].some((prefix) => entry.name.startsWith(prefix))) {
         files.push(...collectFiles(fullPath));
       }
     } else if (entry.isFile()) {

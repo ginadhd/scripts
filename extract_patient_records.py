@@ -434,8 +434,12 @@ def main():
         if not patient_folder.is_dir():
             continue
 
-        records_dir = patient_folder / "Personal Patient Records Template"
-        if not records_dir.is_dir():
+        records_dir = None
+        for sub in patient_folder.iterdir():
+            if sub.is_dir() and sub.name.startswith("Personal Patient Records"):
+                records_dir = sub
+                break
+        if records_dir is None:
             logger.warning(
                 f'Skipping "{patient_folder.name}": '
                 f"no Personal Patient Records Template subfolder"
